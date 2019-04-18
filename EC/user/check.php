@@ -12,15 +12,29 @@ if (!isset($_SESSION['user'])) {
 }
 
 //登録処理をする
-if (!empty($_POST)) { #登録ボタンが押されたら「true」
+if (!empty($_POST)) { #登録ボタンが押されたら「true」→以下の処理を実施
   //DBにセッション情報を登録する
-  $statement = $db->prepare('INSERT INTO members SET name=?, email=?, password=?, created=NOW()');
-  $stmt = $dbl->prepare($sql);
-    echo $ret = $stmt->execute(array(
+  // prepareメソッドではフォームで受け取った内容を指定する箇所を「?」と記述する。
+  $stmt = $pdo->prepare('INSERT INTO members SET name=?, email=?, password=?, created=NOW()');
+    echo $res = $stmt->execute(array(
         $_SESSION['user']['name'],
         $_SESSION['user']['email'],
-        shal($_SESSION['user']['password']),
+        shal($_SESSION['user']['password'])
     ));
+  #失敗
+
+  //DBにセッション情報を登録する
+  // $sql = 'INSERT INTO members (
+  //   id, email, password, name, add, tel, card, security_code, created, modified)
+  //   VALUES (
+  //     , ?, ?, ?, , , , , NOW(), ,
+  //   )';
+  //   //パラメータ設定
+  //   $stmt->bind_param('sisss',$_SESSION['user']['name'], $_SESSION['user']['email'], shal($_SESSION['user']['password'] );
+  //   $res = $stmt->execute();
+  #失敗
+
+    //セッションの削除
     unset($_SESSION['user']);
     header('Location:thanks.php');
     exit();
