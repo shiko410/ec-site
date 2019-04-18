@@ -7,6 +7,6 @@
   </head>
   <body>
     <p>ユーザー登録が完了しました</p>
-    <p><a href="../">ログインする</p>
+    <p><a href="./login.php">ログインする</p>
   </body>
 </html>

@@ -1,6 +1,13 @@
+<?php
+//エラー出力強制
+ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+//すべてのエラー表示
+error_reporting( E_ALL );
+$_SESSION['token'] = session_id();
+header('X-FRAME-OPTIONS: DENY');
+?>
+
 <?php require('../DB/dbconnect.php'); ?>
-
-
 
 <?php
 session_start();
@@ -19,20 +26,8 @@ if (!empty($_POST)) { #登録ボタンが押されたら「true」→以下の�
     echo $res = $stmt->execute(array(
         $_SESSION['user']['name'],
         $_SESSION['user']['email'],
-        shal($_SESSION['user']['password'])
+        sha1($_SESSION['user']['password'])
     ));
-  #失敗
-
-  //DBにセッション情報を登録する
-  // $sql = 'INSERT INTO members (
-  //   id, email, password, name, add, tel, card, security_code, created, modified)
-  //   VALUES (
-  //     , ?, ?, ?, , , , , NOW(), ,
-  //   )';
-  //   //パラメータ設定
-  //   $stmt->bind_param('sisss',$_SESSION['user']['name'], $_SESSION['user']['email'], shal($_SESSION['user']['password'] );
-  //   $res = $stmt->execute();
-  #失敗
 
     //セッションの削除
     unset($_SESSION['user']);
@@ -40,11 +35,6 @@ if (!empty($_POST)) { #登録ボタンが押されたら「true」→以下の�
     exit();
 }
 
-//書き直し→ signup.php?action=rewriteとなっていた場合、$_SESSION['user'];を引継ぐ
-if ($_REQUEST['action'] == 'rewrite') {
-  $_POST = $_SESSION['user'];
-  $error['rewrite'] = true;
-}
 
 ?>
 
@@ -67,9 +57,9 @@ if ($_REQUEST['action'] == 'rewrite') {
   </div>
   <div id="wrap">
     <div class="box-inner">
-    <div id="head">
-      <h1>確認画面</h1>
-    </div>
+      <div id="head">
+        <h1>確認画面</h1>
+      </div>
     <div id="content">
   <!-- スタイルの設定 終わり -->
 
