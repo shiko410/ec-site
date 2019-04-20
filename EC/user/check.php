@@ -1,10 +1,10 @@
 <?php
-//エラー出力強制
-ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
-//すべてのエラー表示
-error_reporting( E_ALL );
-$_SESSION['token'] = session_id();
-header('X-FRAME-OPTIONS: DENY');
+// //エラー出力強制
+// ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+// //すべてのエラー表示
+// error_reporting( E_ALL );
+// $_SESSION['token'] = session_id();
+// header('X-FRAME-OPTIONS: DENY');
 ?>
 
 <?php require('../DB/dbconnect.php'); ?>
@@ -34,7 +34,6 @@ if (!empty($_POST)) { #登録ボタンが押されたら「true」→以下の�
     header('Location:thanks.php');
     exit();
 }
-
 
 ?>
 

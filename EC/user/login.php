@@ -1,5 +1,41 @@
+<?php
+// //エラー出力強制
+// ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+// //すべてのエラー表示
+// error_reporting( E_ALL );
+// $_SESSION['token'] = session_id();
+// header('X-FRAME-OPTIONS: DENY');
+?>
+
 <?php require('../DB/dbconnect.php'); ?>
 <?php
+  session_start();
+
+  if (!empty($_POST)) { #送信ボタンを押された時
+    //ログイン処理
+    if ($_POST['email'] != '' && $_POST['password'] != '') {
+      $login = $pdo->prepare('SELECT * FROM members WHERE email=? AND password=?');
+      $login->execute(array(
+        $_POST['email'],
+        sha1($_POST['password'])
+      ));
+      $member = $login->fetch();
+
+      //ログイン成功→
+      if ($member) {
+        $_SESSION['id'] = $member['id'];
+        $_SESSION['time'] =time();
+
+        header('Location:../index.php'); exit();
+      } else {
+        #ログイン失敗時の処理
+        $error['login'] = 'failed';
+      }
+    } else {
+      #空白時の処理
+      $error['login'] = 'blank';
+    }
+  }
 
 ?>
 
@@ -35,11 +71,11 @@
           <dl>
             <dt>メールアドレス</dt>
             <dd>
-              <input type="text" name="email" size="45" maxlength="255" value="">
+              <input type="text" name="email" size="45" maxlength="255" value="<?php echo h($POST['email']) ?>" required>
             </dd>
             <dt>パスワード</dt>
             <dd>
-              <input type="text" name="password" size="45" maxlength="255" value="">
+              <input type="text" name="password" size="45" maxlength="255" value="<?php echo h($POST['email']) ?>" required>
             </dd>
             <dt>ログイン情報の記録</dt>
             <dd>
@@ -48,8 +84,10 @@
           </dl>
           <div class="input_wrap"><input type="submit" value="ログインする"></div>
         </form>
-
-
+        <p></p>
+        <p>
+          <a href="signup.php">新規登録</a>
+        </p>
 
         </div>
         </div>
