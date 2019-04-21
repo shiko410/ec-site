@@ -1,5 +1,13 @@
-<?php require('../DB/dbconnect.php'); ?>
-
+<?php
+//エラー出力強制
+ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+//すべてのエラー表示
+error_reporting( E_ALL );
+$_SESSION['token'] = session_id();
+header('X-FRAME-OPTIONS: DENY');
+#sql接続
+ require('../DB/dbconnect.php');
+?>
 <!DOCTYPE html>
 <html lang="jp" dir="ltr">
   <head>

@@ -1,17 +1,12 @@
 <?php
-// //エラー出力強制
-// ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
-// //すべてのエラー表示
-// error_reporting( E_ALL );
-// $_SESSION['token'] = session_id();
-// header('X-FRAME-OPTIONS: DENY');
-?>
-
-<?php require('../DB/dbconnect.php'); ?>
-
-<?php
-session_start();
-
+//エラー出力強制
+ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+//すべてのエラー表示
+error_reporting( E_ALL );
+$_SESSION['token'] = session_id();
+header('X-FRAME-OPTIONS: DENY');
+require('../DB/dbconnect.php');
+ session_start();
 //$_SESSION['user']に何も含まれない場合、会員登録ページへ移動させる
 if (!isset($_SESSION['user'])) {
   header('Location:signup.php');
@@ -36,7 +31,6 @@ if (!empty($_POST)) { #登録ボタンが押されたら「true」→以下の�
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="jp" dir="ltr">
   <head>

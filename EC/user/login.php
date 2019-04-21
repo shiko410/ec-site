@@ -1,15 +1,12 @@
 <?php
-// //エラー出力強制
-// ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
-// //すべてのエラー表示
-// error_reporting( E_ALL );
-// $_SESSION['token'] = session_id();
-// header('X-FRAME-OPTIONS: DENY');
-?>
-
-<?php require('../DB/dbconnect.php'); ?>
-<?php
-  session_start();
+//エラー出力強制
+ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+//すべてのエラー表示
+error_reporting( E_ALL );
+$_SESSION['token'] = session_id();
+header('X-FRAME-OPTIONS: DENY');
+require('../DB/dbconnect.php');
+session_start();
 
   if (!empty($_POST)) { #送信ボタンを押された時
     //ログイン処理
@@ -37,9 +34,10 @@
     }
   }
 
+#エラー処理
+$email = $_POST['eail'] ?? "" ;
+$password = $_POST['password'] ?? "" ;
 ?>
-
-
 <!DOCTYPE html>
 <html lang="jp" dir="ltr">
   <head>
@@ -71,11 +69,11 @@
           <dl>
             <dt>メールアドレス</dt>
             <dd>
-              <input type="text" name="email" size="45" maxlength="255" value="<?php echo h($POST['email']) ?>" required>
+              <input type="text" name="email" size="45" maxlength="255" value="<?php echo h($email) ?>" required>
             </dd>
             <dt>パスワード</dt>
             <dd>
-              <input type="text" name="password" size="45" maxlength="255" value="<?php echo h($POST['email']) ?>" required>
+              <input type="text" name="password" size="45" maxlength="255" value="<?php echo h($password) ?>" required>
             </dd>
             <dt>ログイン情報の記録</dt>
             <dd>

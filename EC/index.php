@@ -1,5 +1,12 @@
-<?php require('./DB/dbconnect.php'); ?>
-
+<?php
+require('./DB/dbconnect.php');
+//エラー出力強制
+ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+//すべてのエラー表示
+error_reporting( E_ALL );
+$_SESSION['token'] = session_id();
+header('X-FRAME-OPTIONS: DENY');
+?>
 <?php
 session_start();
 
@@ -15,7 +22,6 @@ if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッ
   // header('Location: login.php'); exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="jp" dir="ltr">
   <head>

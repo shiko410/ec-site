@@ -1,5 +1,12 @@
-<?php require('../DB/dbconnect.php'); ?>
 <?php
+//エラー出力強制
+ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+//すべてのエラー表示
+error_reporting( E_ALL );
+$_SESSION['token'] = session_id();
+header('X-FRAME-OPTIONS: DENY');
+#sql接続
+require('../DB/dbconnect.php');
 session_start();
 
 //$_SESSION['vender']の値がからの場合、登録ページへ移動
@@ -25,7 +32,6 @@ if(!empty($_POST)) {  #登録ボタンがクリックされたら以下を実行
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="jp" dir="ltr">
   <head>
@@ -66,7 +72,7 @@ if(!empty($_POST)) {  #登録ボタンがクリックされたら以下を実行
           <a href="signup.php?action=rewrite">&laquo; &nbsp; 書き直し</a> | <input type="submit" value="登録する">
         </div>
       </form>
-      
+
       <!-- スタイル設定 -->
     </div>
     </div>

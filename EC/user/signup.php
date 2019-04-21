@@ -1,15 +1,20 @@
 <?php
-// //エラー出力強制
-// ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
-// //すべてのエラー表示
-// error_reporting( E_ALL );
-// $_SESSION['token'] = session_id();
-// header('X-FRAME-OPTIONS: DENY');
-?>
-
-<?php require('../DB/dbconnect.php'); ?>
-<?php
+//エラー出力強制
+ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+//すべてのエラー表示
+error_reporting( E_ALL );
+$_SESSION['token'] = session_id();
+header('X-FRAME-OPTIONS: DENY');
+require('../DB/dbconnect.php');
 session_start();
+
+#（エラー対策）フォームの中にPHPを使用する時、POSTの値がなければ空白を挿入する設定
+$name = $_POST['name'] ?? "";
+$email = $_POST['email'] ?? "";
+$password = $_POST['password'] ?? "";
+
+
+
 //フォームが空白でないか→フォームが送信されたかを確認
 if (!empty($_POST)) {
   //エラー項目の確認
@@ -19,12 +24,14 @@ if (!empty($_POST)) {
   if ($_POST['email'] == '') {
     $error['email'] = 'blank';
   }
-  if ($_POST['password'] == '') {
-    $error['password'] = 'blank';
-  }
+  #順番が重要①4文字以下なら'length' 更に ② '' なら 'blank'に変数を書き直す
   if (strlen($_POST['password']) < 4) {
     $error['password'] = 'length';
   }
+  if ($_POST['password'] == '') {
+    $error['password'] = 'blank';
+  }
+
   //エラーがないか確認する→なければチェックページへ
   if(empty($error)) {
     $_SESSION['user'] = $_POST;
@@ -33,10 +40,10 @@ if (!empty($_POST)) {
   }
 }
 //書き直し
-if ($_REQUEST['action'] == 'rewrite') {
-  $_POST = $_SESSION['user'];
-  $error['rewrite'] = true;
-}
+// if ($_REQUEST['action'] == 'rewrite') {
+//   $_POST = $_SESSION['user'];
+//   $error['rewrite'] = true;
+// }
 
 ?>
 <!DOCTYPE html>
@@ -64,30 +71,30 @@ if ($_REQUEST['action'] == 'rewrite') {
           <dl>
             <dt>名前<span> *</span></dt>
             <!-- valueは書き直し時にデータの引き継ぎ -->
-            <dd><input type="text" name="name" size="45" maxlength="255" value="<?php echo h($_POST['name']); ?>">
+            <dd><input type="text" name="name" size="45" maxlength="255" value="<?php echo h($name); ?>">
               <!-- 空白時にエラー表示 -->
-              <?php if ($error['name'] == 'blank'): ?>
+              <?php if (isset($error['name']) && $error['name'] == 'blank'): ?>
                 <p class="error">※ 名前を入力してください </p>
               <?php endif; ?>
             </dd>
 
             <dt>メールアドレス<span> *</span></dt>
             <!-- valueは書き直し時にデータの引き継ぎ -->
-            <dd><input type="text" name="email" size="45" maxlength="255" value="<?php echo h($_POST['email']); ?>">
+            <dd><input type="text" name="email" size="45" maxlength="255" value="<?php echo h($email); ?>">
             <!-- 空白時にエラー表示 -->
-              <?php if ($error['email'] == 'blank'): ?>
+              <?php if (isset($error['email']) && $error['email'] == 'blank'): ?>
                 <p class="error">※ メールを入力してください </p>
               <?php endif; ?>
             </dd>
 
             <dt>パスワード<span> *</span></dt>
             <!-- valueは書き直し時にデータを引き継ぎ -->
-            <dd><input type="password" name="password" size="45" maxlength="255" value="<?php echo h($_POST['password']); ?>">
+            <dd><input type="password" name="password" size="45" maxlength="255" value="<?php echo h($password); ?>">
               <!-- 空白時にエラー表示 -->
-                <?php if ($error['password'] == 'blank'): ?>
+                <?php if (isset($error['password']) && $error['password'] == 'blank'): ?>
                   <p class="error">※ パスワードを入力してください </p>
               <!-- 文字数が足りない時にエラー表示 -->
-                <?php elseif ($error['password'] == 'length'): ?>
+            <?php elseif (isset($error['password']) && $error['password'] == 'length'): ?>
                   <p class="error">※ パスワードは4文字以上で入力してください</p>
                 <?php endif; ?>
             </dd>

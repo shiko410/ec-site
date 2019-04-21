@@ -1,7 +1,17 @@
-<?php require('../DB/dbconnect.php'); ?>
-
 <?php
+//エラー出力強制
+ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+//すべてのエラー表示
+error_reporting( E_ALL );
+$_SESSION['token'] = session_id();
+header('X-FRAME-OPTIONS: DENY');
+#sql接続
+require('../DB/dbconnect.php');
 session_start();
+
+#（エラー対策）フォームの中にPHPを使用する時、POSTの値がなければ空白を挿入する設定
+$email = $_POST['email'] ?? ""; //$_POST['email']があればそのままなければ空白を挿入
+$password = $_POST['password'] ?? ""; //$_POST['password']があればそのままなければ空白を挿入
 
 if (!empty($_POST)) { #送信ボタンがクリックされたら以下を実行
 	//ログイン処理
@@ -25,7 +35,6 @@ if (!empty($_POST)) { #送信ボタンがクリックされたら以下を実行
 			$_SESSION['time'] = time();
 
 			header('Location: ./index-venders.php');
-
 		} else {
 			#ログイン失敗時の処理
 			$error['login'] = 'failed';
@@ -34,11 +43,9 @@ if (!empty($_POST)) { #送信ボタンがクリックされたら以下を実行
 		#空白時の処理
 		$error['login'] = 'blank';
 	}
-
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="jp" dir="ltr">
   <head>
@@ -67,11 +74,11 @@ if (!empty($_POST)) { #送信ボタンがクリックされたら以下を実行
 						<dl>
 							<dt>メールアドレス</dt>
 							<dd>
-								<input type="text" name="email" size="45" maxlength="255" value="<?php echo h($_POST['email']); ?>" >
+								<input type="text" name="email" size="45" maxlength="255" value="<?php echo h($email); ?>" required/>
 							</dd>
 							<dt>パスワード</dt>
 							<dd>
-								<input type="text" name="password" size="45" value="<?php echo h($_POST['password']); ?>">
+								<input type="text" name="password" size="45" value="<?php echo h($password); ?>" required/>
 							</dd>
 							<dt>ログイン情報の記録</dt>
 							<dd>

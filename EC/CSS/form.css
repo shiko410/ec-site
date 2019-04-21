@@ -78,3 +78,11 @@ input {
   border: 2px solid red;
   display: inline;
 }
+
+.input_wrap {
+  text-align: center;
+}
+.input_wrap input:hover {
+  background-color: rgb(142, 140, 145);
+  color: #fff;
+}
