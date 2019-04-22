@@ -86,3 +86,17 @@ input {
   background-color: rgb(142, 140, 145);
   color: #fff;
 }
+.box {
+  width: 300px;
+  height: 100px;
+  text-align: center;
+  border: 1px solid #333;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+.box p {
+  padding: 45px 0;
+}
+.box:hover {
+  background-color: rgb(249, 227, 178);
+}

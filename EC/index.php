@@ -44,11 +44,15 @@ if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッ
         <ul>
           <?php if(isset($_SESSION['id'])): ?>
           <li><?php echo h($member['name']); ?>さんようこそ</li>
+          <li><a href="./user/account/account.php">アカウント情報</a></li>
           <?php else: ?>
           <li><a href="./user/login.php">ログイン<br/><span>login</span></a></li>
           <?php endif; ?>
           <li><a href="./vender/login.php">出店者の方へ<br/><span>tenants</span></a></li>
           <li><a href="#">問い合わせ<br/><span>outline</span></a></li>
+          <?php if(isset($_SESSION['id'])): ?>
+          <li><a href="./user/logout.php">ログアウト</a></li>
+          <?php endif; ?>
         </ul>
       </nav>
       <img src="./images/top.png" alt="トップ画像" style="width: 100%; ">

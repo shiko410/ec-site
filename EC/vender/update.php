@@ -49,7 +49,7 @@ if (isset ($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
 if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) { #URLにidが格納されていて∧値がINTのとき
 	$id = $_REQUEST['id'];
 }
-
+#フォームにDBデータを呼び出し
 	$stmt = $pdo->prepare('SELECT * FROM items WHERE id=?');
 	$stmt->execute(array($id));
 	$stm = $stmt->fetch();
@@ -58,7 +58,27 @@ if (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) { #URLにidが格納�
 					<form action="update_do.php" method="post">
 						<!-- 投稿をアップデートする -->
 						<input type="hidden" name="id" value="<?php print($_REQUEST['id']); ?>">
+
+						<!-- id -->
+						<p>ID:
+						<input type="text" name="" value="<?php print($stm['id']); ?>" size="45">
+						</p>
+						<!-- item -->
+						<p>商品名：
+							<input type="text" name="item" value="<?php print($stm['item']); ?>" size="45">
+						</p>
+						<!-- price -->
+						<p>価格：
+							<input type="text" name="price" value="<?php print($stm['price']); ?>" size="45">
+						</p>
+						<!-- stock -->
+						<p>在庫：
+							<input type="text" name="stock" value="<?php print($stm['stock']); ?>" size="45">
+						</p>
+						<!-- info -->
+						<p>詳細：
 						<textarea name="info" rows="8" cols="45"><?php print($stm['info']); ?></textarea><br>
+						</p>
 						<button type="submit" >登録する</button>
 					</form>
 

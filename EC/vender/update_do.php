@@ -31,8 +31,14 @@ session_start();
 					<!-- スタイル設定 終わり -->
           <?php
           #$_POST['id']はinput_hiddenで送信
-          $stmt = $pdo->prepare('UPDATE items SET info=? WHERE id=?');
-          $stmt->execute(array($_POST['info'], $_POST['id']));
+          $stmt = $pdo->prepare('UPDATE items SET item=?, price=?, stock=?, info=? WHERE id=?');
+          $stmt->execute(array(
+            $_POST['item'],
+            $_POST['price'],
+            $_POST['stock'],
+            $_POST['info'], 
+
+            $_POST['id']));
            ?>
            <p>内容を変更しました</p>
            <p>
