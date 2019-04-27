@@ -40,7 +40,7 @@ $stm = $stmt->fetch();
   <body>
 <!-- スタイルの設定 -->
       <div class="top">
-        <h1><a href="../index.php">ECサイト</a></h1>
+        <h1><a href="../../../index.php">ECサイト</a></h1>
         <!-- ↑ セッションを削除するページへ編集予定 -->
       </div>
       <div id="wrap">
@@ -83,9 +83,9 @@ $stm = $stmt->fetch();
       </form>
 <!-- 住所 -->
       <form class="" action="./update_add.php?id=<?php print( $id);?>" method="post">
-        <p> 住所： <?php print($stm['add']); ?>
+        <p> 住所： <?php print($stm['address']); ?>
           <div style="text-align: right;">
-            <input type="hidden" name="value" value="add">
+            <input type="hidden" name="value" value="address">
             <input type="submit" name="edit" value="編集">
           </div>
         </p>
@@ -103,15 +103,19 @@ $stm = $stmt->fetch();
       </form>
 <!-- カード情報 -->
       <form class="" action="./update_card.php?id=<?php print( $id);?>" method="post">
-        <p> カード情報： 表示されません
+        <p> カード情報： 【表示されません】
+          <div style="text-align: right;">
           <input type="hidden" name="value" value="card">
           <input type="submit" name="edit" value="編集">
+          </div>
         </p>
       </form>
 <!--スタイル設定 -->
     </div>
     </div>
   </div>
+  <p style="width: 350px; margin: 20px auto;"><a href="./account.php">戻る</a></p>
 <!-- スタイル設定終わり -->
+
   </body>
 </html>

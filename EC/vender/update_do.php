@@ -36,7 +36,7 @@ session_start();
             $_POST['item'],
             $_POST['price'],
             $_POST['stock'],
-            $_POST['info'], 
+            $_POST['info'],
 
             $_POST['id']));
            ?>

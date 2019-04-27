@@ -6,8 +6,6 @@ ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると
 error_reporting( E_ALL );
 $_SESSION['token'] = session_id();
 header('X-FRAME-OPTIONS: DENY');
-?>
-<?php
 session_start();
 
 if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッションに記録されている && 最後の行動から1時間以内
@@ -21,6 +19,10 @@ if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッ
   //ログインしていない
   // header('Location: login.php'); exit();
 }
+$name = $member['name'] ?? "";
+#商品情報の呼び出し
+$sql = 'SELECT * FROM items ORDER BY modified DESC LIMIT 0, 12';
+$items = $pdo->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="jp" dir="ltr">
@@ -42,8 +44,8 @@ if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッ
       <nav class="toggle">
         <i class="fa fa-bars menu" aria-hidden="true"></i>
         <ul>
-          <?php if(isset($_SESSION['id'])): ?>
-          <li><?php echo h($member['name']); ?>さんようこそ</li>
+          <?php if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()): ?>
+          <li><?php echo h($name); ?>さんようこそ</li>
           <li><a href="./user/account/account.php">アカウント情報</a></li>
           <?php else: ?>
           <li><a href="./user/login.php">ログイン<br/><span>login</span></a></li>
@@ -58,19 +60,23 @@ if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッ
       <img src="./images/top.png" alt="トップ画像" style="width: 100%; ">
       </div>
       <!-- メイン -->
+      <?php foreach ($items as $item): ?>
       <div id="main">
         <div class="section-all">
+          <a href="detail.php?id=<?php echo h($item['id']); ?>">
           <div class="item-cover">
             <div class="item-pic"> <!-- 画像 -->
-              <img src="item_pic/bento.jpg" alt="">
+              <img src="item_pic/bento.jpg" alt="" style="width: 300px;">
             </div>
             <div class="detail"> <!-- 詳細 -->
-              <p>Bento</p>
+              <!-- 商品名 -->
+              <p><?php echo h($item['item']); ?></p>
+              <p><?php echo h($item['price']); ?>円</p>
             </div>
           </div>
         </div>
-
-
+      <?php endforeach; ?>
+      </a>
       </div>
     </div>
   </body>

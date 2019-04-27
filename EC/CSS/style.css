@@ -105,6 +105,9 @@ table {
   width: 260px;
   text-align: center;
 }
+.section-all a:hover {
+  background-color: rgba(57, 125, 181, 0.48);
+}
 img {
   width: auto;
   height: auto;

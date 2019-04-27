@@ -25,7 +25,7 @@ $name = $_POST['name'] ?? $member['name'];
 $email = $_POST['email'] ?? $member['email'];
 $tel = $_POST['tel'] ?? $member['tel'];
 #データを更新する
-$stmt = $pdo->prepare('UPDATE members SET name=?, email=?, password=?, tel=? WHERE id=?');
+$stmt = $pdo->prepare('UPDATE members SET name=?, email=?, tel=? WHERE id=?');
 $stmt->execute(array(
   $name,
   $email,
@@ -38,7 +38,6 @@ $stmt->execute(array(
 <p>
   <a href="account-info.php">戻る</a>
 </p>
-<p>確認</p>
 
    </body>
  </html>
