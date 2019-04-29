@@ -31,10 +31,10 @@ if (!empty($_POST)) { #送信ボタンがクリックされたら以下を実行
 		if ($vender) {
 			//ログイン成功
 			//セッションにidとtimeを記録する
-			$_SESSION['id'] = $vender['id'];
-			$_SESSION['time'] = time();
+			$_SESSION['vender']['id'] = $vender['id'];
+			$_SESSION['vender']['time'] = time();
 
-			header('Location: ./index-venders.php');
+			header('Location: ./account/account.php');
 		} else {
 			#ログイン失敗時の処理
 			$error['login'] = 'failed';

@@ -6,7 +6,7 @@ error_reporting( E_ALL );
 $_SESSION['token'] = session_id();
 header('X-FRAME-OPTIONS: DENY');
 #sql接続
-require('../DB/dbconnect.php');
+require('../../DB/dbconnect.php');
 session_start();
 //$_SESSIONのidの有無、$_SESSIONの時間
 if (isset ($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
@@ -67,7 +67,10 @@ $items = $pdo->query('SELECT v.name, i.* FROM venders v, items i WHERE v.id=i.ve
 	<?php endforeach; ?>
 	<div class="return">
 		<p>
-			<a href="./index-venders.php">投稿画面へ戻る</a>
+			<a href="./index-venders.php">投稿画面へ</a>
+		</p>
+		<p>
+			<a href="./account.php">戻る</a>
 		</p>
 	</div>
   </body>

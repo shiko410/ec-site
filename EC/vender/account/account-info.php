@@ -1,31 +1,23 @@
 <?php
-//エラー出力強制
-ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
-//すべてのエラー表示
-error_reporting( E_ALL );
-$_SESSION['token'] = session_id();
-header('X-FRAME-OPTIONS: DENY');
-#sql接続
 require('../../DB/dbconnect.php');
 session_start();
-//$_SESSIONのidの有無、$_SESSIONの時間
-if (isset ($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time()) {
-  //ログインしている
-  $_SESSION['user']['time'] = time();
-
-  $members = $pdo->prepare('SELECT * FROM members WHERE id=?');
-  $members->execute(array($_SESSION['user']['id']));
-  $member = $members->fetch();
+#ログイン確認
+if(isset($_SESSION['vender']['id']) && $_SESSION['vender']['time'] + 3600 > time()) {
+  $_SESSION['vender']['time'] = time();
+  $venders = $pdo->prepare('SELECT * FROM venders WHERE id=?');
+  $venders->execute(array($_SESSION['vender']['id']));
+  $vender = $venders->fetch();
 } else {
   //ログインしていない時の処理
   header('Location: ./login.php');
 }
+print_r($_SESSION);
 
 #DB内容を取得
-if (isset($_SESSION['user']['id']) && is_numeric($_SESSION['user']['id'])) {
-   $id = $_SESSION['user']['id'];
+if (isset($_SESSION['vender']['id']) && is_numeric($_SESSION['vender']['id'])) {
+   $id = $_SESSION['vender']['id'];
 }
-$stmt = $pdo->prepare('SELECT * FROM members WHERE id=?');
+$stmt = $pdo->prepare('SELECT * FROM venders WHERE id=?');
 $stmt->execute(array($id));
 $stm = $stmt->fetch();
 ?>
@@ -72,7 +64,7 @@ $stm = $stmt->fetch();
         <hr>
       </form>
 <!-- パスワード -->
-      <form class="" action="./update_password.php?id=<?php print( $id);?>" method="post">
+      <form class="" action="./update_password.php?id=<?php print($id);?>" method="post">
         <p> パスワード：【表示されません】
           <div style="text-align: right;">
             <input type="hidden" name="value" value="password">
@@ -82,7 +74,7 @@ $stm = $stmt->fetch();
         <hr>
       </form>
 <!-- 住所 -->
-      <form class="" action="./update_add.php?id=<?php print( $id);?>" method="post">
+      <form class="" action="./update_add.php?id=<?php print($id);?>" method="post">
         <p> 住所： <?php print($stm['address']); ?>
           <div style="text-align: right;">
             <input type="hidden" name="value" value="address">

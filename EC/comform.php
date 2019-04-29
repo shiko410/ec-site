@@ -6,13 +6,14 @@ header('X-FRAME-OPTIONS: DENY');
 require('./DB/dbconnect.php');
 session_start();
 # ログイン確認
-if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッションに記録されている && 最後の行動から1時間以内
+if (isset($_SESSION['user']['id']) && $_SESSION ['user']['time'] + 3600 > time()) { #idがセッションに記録されている && 最後の行動から1時間以内
   //ログインしている
-  $_SESSION['time'] = time();
+  $_SESSION['user']['time'] = time();
 
   $members = $pdo->prepare('SELECT * FROM members WHERE id=?');
-  $members->execute(array($_SESSION['id']));
+  $members->execute(array($_SESSION['user']['id']));
   $member = $members->fetch();
+  print_r($_SESSION);
 } else {
   //ログインしていない
   // header('Location: login.php'); exit();
@@ -20,13 +21,15 @@ if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッ
 #商品データの呼び出し
 $sql = 'SELECT * FROM items WHERE id=?';
 $items = $pdo->prepare($sql);
-$items->execute(array($_REQUEST['id']));
+$items->execute(array($_SESSION['item_id']));
 $item = $items->fetch();
 
 #データの更新
 #購入数（DB-購入数）で更新
+print_r($item['stock']. "\n");
+print_r($_SESSION['buy']['buy']. "\n");
 $stock = $item['stock'] - $_SESSION['buy']['buy'];
-$_SESSION['item_id'] = $_REQUEST['id'];
+echo $stock;
 if (!empty($_POST)) {
   #table:items
   $sql1 = 'UPDATE items SET stock=?  WHERE id=?';
@@ -36,12 +39,12 @@ if (!empty($_POST)) {
     $_SESSION['item_id']
   ));
   #table:buy
-  $stmt = $pdo->prepare('INSERT INTO buy SET members_id=? items_id=? p_number=? created=NOW()');
-  $res = $stmt->execute(array(
-    $_SESSION['id'],
-    $_SESSION['item_id'],
-    $_POST['buy']
-  ));
+  $stmt = $pdo->prepare('INSERT INTO buy SET members_id=?, items_id=?, p_number=?, created=NOW()');
+    $res = $stmt->execute(array(
+      $_SESSION['user']['id'],
+      $_SESSION['item_id'],
+      $_SESSION['buy']['buy']
+    ));
   header('Location: thanks.php');
   exit();
 }

@@ -6,7 +6,7 @@ error_reporting( E_ALL );
 $_SESSION['token'] = session_id();
 header('X-FRAME-OPTIONS: DENY');
 #sql接続
-require('../DB/dbconnect.php');
+require('../../DB/dbconnect.php');
 session_start();
 //$_SESSIONのidの有無、$_SESSIONの時間
 if (isset ($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
@@ -86,7 +86,10 @@ print_r($items);
 	<?php endforeach; ?>
 	<div class="return">
 		<p>
-			<a href="./index-venders.php">投稿画面へ戻る</a>
+			<a href="./index-venders.php">投稿画面へ</a>
+		</p>
+		<p>
+			<a href="./account.php">戻る</a>
 		</p>
 	</div>
 	<!-- ページング -->
@@ -104,5 +107,8 @@ print_r($items);
 			<a href="view.php?page=<?php print($page+1); ?>"><?php print($page + 1); ?>ページ目へ</a>
 		<?php endif; ?>
 	</div>
+	<p>
+		<a href="./view_all.php">全件を表示</a>
+	</p>
   </body>
 </html>

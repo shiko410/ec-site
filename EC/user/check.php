@@ -29,7 +29,6 @@ if (!empty($_POST)) { #登録ボタンが押されたら「true」→以下の�
     header('Location:thanks.php');
     exit();
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="jp" dir="ltr">

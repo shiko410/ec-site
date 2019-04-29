@@ -1,32 +1,31 @@
 <?php
-//エラー出力強制
-ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
-//すべてのエラー表示
-error_reporting( E_ALL );
+//エラー強制出力
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 $_SESSION['token'] = session_id();
 header('X-FRAME-OPTIONS: DENY');
-#sql接続
+#SQL接続
 require('../../DB/dbconnect.php');
 session_start();
 //$_SESSIONのidの有無、$_SESSIONの時間
-if (isset ($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time()) {
+if (isset ($_SESSION['vender']['id']) && $_SESSION['vender']['time'] + 3600 > time()) {
   //ログインしている
-  $_SESSION['user']['time'] = time();
+  $_SESSION['vender']['time'] = time();
 
-  $members = $pdo->prepare('SELECT * FROM members WHERE id=?');
-  $members->execute(array($_SESSION['user']['id']));
-  $member = $members->fetch();
+  $venders = $pdo->prepare('SELECT * FROM venders WHERE id=?');
+  $venders->execute(array($_SESSION['vender']['id']));
+  $vender = $venders->fetch();
 } else {
   //ログインしていない時の処理
-  header('Location: ../login.php');
+  header('Location: ./login.php');
 }
  ?>
 <!DOCTYPE html>
 <html lang="jp" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>アカウント管理</title>
-    <!-- stylesheet -->
+    <title></title>
+    <!-- stylesheer -->
     <link rel="stylesheet" href="../../CSS/form.css">
   </head>
   <body>
@@ -38,13 +37,25 @@ if (isset ($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time()
       <div id="wrap">
         <div class="box-inner">
           <div id="head">
-            <h1>アカウント情報</h1>
+            <h1><?php echo h($vender['name']); ?>さんようこそ</h1>
           </div>
         <div id="content">
 <!-- スタイルの設定 終わり -->
-        <a href="./order_hisitory.php">
+
+        <a href="./index-venders.php">
+          <div class="box">
+            <p>商品登録</p>
+          </div>
+        </a>
+
+        <a href="./order_history.php">
           <div class="box">
             <p>注文履歴</p>
+          </div>
+        </a>
+        <a href="./view.php">
+          <div class="box">
+            <p>商品一覧</p>
           </div>
         </a>
         <a href="./account-info.php">
@@ -52,14 +63,9 @@ if (isset ($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time()
             <p>アカウント情報の変更</p>
           </div>
         </a>
-        <a href="./update_add.php">
-          <div class="box">
-            <p>送付先の変更</p>
-          </div>
-        </a>
         <a href="./payment.php">
           <div class="box">
-            <p>支払い方法の変更</p>
+            <p>口座の変更</p>
           </div>
         </a>
 <!--スタイル設定 -->
@@ -67,6 +73,5 @@ if (isset ($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time()
     </div>
   </div>
 <!-- スタイル設定終わり -->
-  <p style="width: 350px; margin: 20px auto;"><a href="../../index.php">戻る</a></p>
   </body>
 </html>

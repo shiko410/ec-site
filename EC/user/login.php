@@ -20,8 +20,8 @@ session_start();
 
       //ログイン成功→
       if ($member) {
-        $_SESSION['id'] = $member['id'];
-        $_SESSION['time'] =time();
+        $_SESSION['user']['id'] = $member['id'];
+        $_SESSION['user']['time'] =time();
 
         header('Location:../index.php'); exit();
       } else {

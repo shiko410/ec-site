@@ -1,18 +1,20 @@
 <?php
-ini_set('display_errors', 1);
+ini_set('display_errors', -1);
 error_reporting(E_ALL);
 $_SESSION['token'] = session_id();
 header('X-FRAME-OPTIONS: DENY');
 require('./DB/dbconnect.php');
 session_start();
 # ログイン確認
-if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッションに記録されている && 最後の行動から1時間以内
+if (isset($_SESSION['user']['id']) && $_SESSION ['user']['time'] + 3600 > time()) { #idがセッションに記録されている && 最後の行動から1時間以内
   //ログインしている
-  $_SESSION['time'] = time();
+  $_SESSION['user']['time'] = time();
 
   $members = $pdo->prepare('SELECT * FROM members WHERE id=?');
-  $members->execute(array($_SESSION['id']));
+  $members->execute(array($_SESSION['user']['id']));
   $member = $members->fetch();
+  print_r($_SESSION);
+
 } else {
   //ログインしていない
   // header('Location: login.php'); exit();
@@ -30,6 +32,11 @@ $item = $items->fetch();
      <title></title>
    </head>
    <body>
+<div class="" style="border: 1px solid #333;">
+  <p>商品情報</p>
+  <p><?php echo h($item['info']); ?></p>
+</div>
+
 <p><?php echo h($item['item']); ?></p>
 <p>価格：<?php echo h($item['price']); ?>円</p>
 <?php
@@ -46,8 +53,16 @@ if (!empty($_POST)) {
   }
   //エラー無し
   if (empty($error)) {
+    if (!empty($_POST['now'])) {
     $_SESSION['buy'] = $_POST;
-    header("Location: comform.php?id={$_REQUEST['id']}");
+    $_SESSION['item_id'] = $_REQUEST['id'];
+    header("Location: comform.php");
+    exit();
+  } elseif (!empty($_POST['cart'])) {
+    $_SESSION['buy'] = $_POST;
+    $_SESSION['item_id'] = $_REQUEST['id'];
+    header("Location: ./cart/cart.php");
+    exit();  }
   }
 }
 
@@ -62,9 +77,9 @@ if (!empty($_POST)) {
     <p><?php echo "申し訳ございませんが、数量オーバーです。最大購入数は{$stock}個です。"; ?></p>
   <?php endif; ?>
   <p>
-    <input type="submit" name="" value="購入内容確認">
+    <input type="submit" name="now" value="今すぐ買う">
+    <input type="submit" name="cart" value="カートに入れる">
   </p>
-</form>
-<?php print_r($_POST['buy']); ?>
+
    </body>
  </html>

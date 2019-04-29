@@ -8,22 +8,22 @@ header('X-FRAME-OPTIONS: DENY');
 require('../../DB/dbconnect.php');
 session_start();
 #ログイン状態の確認
-if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
+if (isset($_SESSION['vender']['id']) && $_SESSION['vender']['time'] + 3600 > time()) {
   //ログインしている
-  $_SESSION['time'] = time();
-  $sql = 'SELECT * FROM members WHERE id=?';
-  $members = $pdo->prepare($sql);
-  $members->execute(array($_SESSION['id']));
-  $member = $members->fetch();
+  $_SESSION['vender']['time'] = time();
+  $sql = 'SELECT * FROM venders WHERE id=?';
+  $venders = $pdo->prepare($sql);
+  $venders->execute(array($_SESSION['vender']['id']));
+  $vender = $venders->fetch();
 }
 #この画面でデータを入力
 $address = $_POST['address'] ?? "";
 if (isset($_POST['address'])) {
-  $update = 'UPDATE members SET address=? WHERE id=?';
+  $update = 'UPDATE venders SET address=? WHERE id=?';
   $stmt = $pdo->prepare($update);
   $stmt->execute(array(
     $address,
-    $_SESSION['id']
+    $_SESSION['vender']['id']
   ));
   header('Location: update_do.php');
   exit();
@@ -58,14 +58,14 @@ if (isset($_POST['address'])) {
           <?php
           if (empty($_REQUEST)) $_REQUEST['id'] = "";
           $id = $_REQUEST['id'];
-          $members = $pdo->prepare('SELECT * FROM members WHERE id=?');
-          $members->execute(array($id));
-          $member = $members->fetch();
+          $venders = $pdo->prepare('SELECT * FROM members WHERE id=?');
+          $venders->execute(array($id));
+          $vender = $venders->fetch();
           ?>
           <p>現在のデータ：
             <?php
             #$_POSTデータからDBの必要な情報を取り出し
-            echo $member[$_POST['value']];
+            echo $vender[$_POST['value']];
             ?>
           </p>
           <?php /*
@@ -87,7 +87,7 @@ if (isset($_POST['address'])) {
   <input type="text" name="zip11" size="10" maxlength="8" onKeyUp="AjaxZip3.zip2addr(this,'','address','address');">
   <!-- ▼住所入力フィールド(都道府県+以降の住所) -->
   <label>都道府県と以降の住所</label>
-  <input type="text" name="address" size="60" value="<?php echo h($member['address']); ?>">
+  <input type="text" name="address" size="60" value="<?php echo h($vender['address']); ?>">
   <input type="submit" name="" value="登録する">
 </form>
 </pre>

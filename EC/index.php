@@ -1,19 +1,19 @@
 <?php
 require('./DB/dbconnect.php');
 //エラー出力強制
-ini_set( 'display_errors', 1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
+ini_set( 'display_errors', -1 ); // エラーを画面に表示(1を0にすると画面上にはエラーは出ない)
 //すべてのエラー表示
 error_reporting( E_ALL );
 $_SESSION['token'] = session_id();
 header('X-FRAME-OPTIONS: DENY');
 session_start();
 
-if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()) { #idがセッションに記録されている && 最後の行動から1時間以内
+if (isset($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time()) { #idがセッションに記録されている && 最後の行動から1時間以内
   //ログインしている
-  $_SESSION['time'] = time();
+  $_SESSION['user']['time'] = time();
 
   $members = $pdo->prepare('SELECT * FROM members WHERE id=?');
-  $members->execute(array($_SESSION['id']));
+  $members->execute(array($_SESSION['user']['id']));
   $member = $members->fetch();
 } else {
   //ログインしていない
@@ -44,7 +44,7 @@ $items = $pdo->query($sql);
       <nav class="toggle">
         <i class="fa fa-bars menu" aria-hidden="true"></i>
         <ul>
-          <?php if (isset($_SESSION['id']) && $_SESSION ['time'] + 3600 > time()): ?>
+          <?php if (isset($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time()): ?>
           <li><?php echo h($name); ?>さんようこそ</li>
           <li><a href="./user/account/account.php">アカウント情報</a></li>
           <?php else: ?>
@@ -52,7 +52,7 @@ $items = $pdo->query($sql);
           <?php endif; ?>
           <li><a href="./vender/login.php">出店者の方へ<br/><span>tenants</span></a></li>
           <li><a href="#">問い合わせ<br/><span>outline</span></a></li>
-          <?php if(isset($_SESSION['id'])): ?>
+          <?php if(isset($_SESSION['user']['id'])): ?>
           <li><a href="./user/logout.php">ログアウト</a></li>
           <?php endif; ?>
         </ul>
