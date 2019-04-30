@@ -8,12 +8,12 @@ header('X-FRAME-OPTIONS: DENY');
 require('../../DB/dbconnect.php');
 session_start();
 #ログイン状態の確認
-if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
+if (isset($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time()) {
   // ログインしている
-  $_SESSION['time'] = time();
+  $_SESSION['user']['time'] = time();
 
   $members = $pdo->prepare('SELECT * FROM members WHERE id=?');
-  $members->execute(array($_SESSION['id']));
+  $members->execute(array($_SESSION['user']['id']));
   $member = $members->fetch();
 }
 ?>

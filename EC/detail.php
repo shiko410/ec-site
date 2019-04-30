@@ -17,13 +17,14 @@ if (isset($_SESSION['user']['id']) && $_SESSION ['user']['time'] + 3600 > time()
 
 } else {
   //ログインしていない
-  // header('Location: login.php'); exit();
+  $login = "unlogin";
 }
 #商品データの呼び出し
 $sql = 'SELECT * FROM items WHERE id=?';
 $items = $pdo->prepare($sql);
 $items->execute(array($_REQUEST['id']));
 $item = $items->fetch();
+$stock= $item['stock'];
  ?>
  <!DOCTYPE html>
  <html lang="jp" dir="ltr">
@@ -40,27 +41,26 @@ $item = $items->fetch();
 <p><?php echo h($item['item']); ?></p>
 <p>価格：<?php echo h($item['price']); ?>円</p>
 <?php
-$buy = $_POST['buy'] ?? "";
+
 if (!empty($_POST)) {
-  if ($_POST['buy'] == '') {
+  if ($_POST['p_num'] == '') {
     $error = 'blank';
-  }
-  if ($_POST['buy'] <= 0) {
+  } elseif ($_POST['p_num'] <= 0) {
     $error = 'num';
-  }
-  if ($_POST['buy'] > $item['stock']) {
+  } elseif ($_POST['p_num'] > $item['stock']) {
     $error = 'exceed';
+  } elseif (isset($login) && $login == "unlogin") {
+    $error = 'login';
   }
   //エラー無し
   if (empty($error)) {
     if (!empty($_POST['now'])) {
-    $_SESSION['buy'] = $_POST;
-    $_SESSION['item_id'] = $_REQUEST['id'];
+    $_SESSION[] = $_POST;
+    $_SESSION[] = $_REQUEST['id'];
     header("Location: comform.php");
     exit();
   } elseif (!empty($_POST['cart'])) {
-    $_SESSION['buy'] = $_POST;
-    $_SESSION['item_id'] = $_REQUEST['id'];
+    $_SESSION['cart'][] = $_POST;
     header("Location: ./cart/cart.php");
     exit();  }
   }
@@ -68,18 +68,22 @@ if (!empty($_POST)) {
 
  ?>
 <form class="" action="" method="post">
-  <input type="number" name="buy" value="" placeholder="">
+  数量：<input type="number" name="p_num" value="" placeholder="">
+  <input type="hidden" name="item_id" value="<?php echo $_REQUEST['id'] ?>">
   <?php if (isset($error) && $error == 'blank'): ?>
-    <p>購入数を正しく入力してください。</p>
+    <p>購入数が入力されていません。購入数を正しく入力してください。</p>
   <?php elseif(isset($error) && $error == 'num'): ?>
     <p>購入数を正しく入力してください。</p>
   <?php elseif(isset($error) && $error == 'exceed'): ?>
     <p><?php echo "申し訳ございませんが、数量オーバーです。最大購入数は{$stock}個です。"; ?></p>
+  <?php elseif(isset($error) && $error == 'login'): ?>
+    <p>恐れ入りますが、<a href="./user/login.php">ログイン</a>していただきますようお願いいたします</p>
   <?php endif; ?>
   <p>
     <input type="submit" name="now" value="今すぐ買う">
     <input type="submit" name="cart" value="カートに入れる">
   </p>
+  <p><a href="./index.php">戻る</a></p>
 
    </body>
  </html>
