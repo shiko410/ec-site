@@ -60,16 +60,15 @@ if (!empty($_POST)) {
     header("Location: comform.php");
     exit();
   } elseif (!empty($_POST['cart'])) {
-    $_SESSION['cart'][] = $_POST;
+    $_SESSION['new'][] = $_POST;
     header("Location: ./cart/cart.php");
     exit();  }
   }
 }
-
  ?>
 <form class="" action="" method="post">
-  数量：<input type="number" name="p_num" value="" placeholder="">
   <input type="hidden" name="item_id" value="<?php echo $_REQUEST['id'] ?>">
+  数量：<input type="number" name="p_num" value="" placeholder="">
   <?php if (isset($error) && $error == 'blank'): ?>
     <p>購入数が入力されていません。購入数を正しく入力してください。</p>
   <?php elseif(isset($error) && $error == 'num'): ?>

@@ -9,24 +9,34 @@ if (isset($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time())
   $member = $members->fetch();
   // print_r($_SESSION);
 }
-  #カート内の内容を取り出す
-  print_r($_SESSION['cart']);
-  $cart = array_column($_SESSION['cart'],null,"item_id");
-  print_r(array_keys($cart));
-  $item_id = array_keys($cart);
-  // var_export(array_column($_SESSION['cart'],null));
-  // var_dump(in_array($_SESSION['cart'],array_keys($cart)));
-  #メモ
-  // print_r(array_keys($cart));
-  #$_SESSION['cart']をカウントし最新のPOSTを調べる
-  $array_num = (count($_SESSION['cart'])-1);
-  $new_session_id = $_SESSION['cart'][$array_num]['item_id'];
-  $item_ids = unset($item_id[$array_num]);
-  //$item_id = array_keys($cart); と同じ
-  // foreach (array_keys($cart) as $value) {
-  //   $item_id[] = $value;
-  // }
-  // print_r($item_id);
+  #カートの内容と比較し、なければ$newをカートに追加
+  print_r($_SESSION);
+  $new = $_SESSION['new'] ?? array(); //送られてきた値
+  $item_id = $new[count($new)-1]['item_id'] ?? ""; //送られてきた値のitem_id
+  $cart = $_SESSION['cart'] ?? ""; //cartに保存してある値
+  #cartにitem_idがあるか検索(array_columnでitem_idをkeyに代入し、array_keysでitem_idを取り出し配列にする)
+  $item_ids = array_keys(array_column($cart,null,"item_id"));
+  // print_r($item_ids); //cartのitem_id一覧表示OK
+  #item_idがitem_idsにあるかを調べる
+  // var_dump(in_array($item_id, $item_ids)); //OK
+  if (!in_array($item_id, $item_ids)) {
+      #item_idが既存カートにないときの処理
+      $cart = array_merge($new); #【エラー】動作しない
+      unset($_SESSION['new']); #【エラー】更新しなければ動作しない
+  } else {
+      #item_idがある時の処理
+      $error = "same_id"; //セッションを更新せず、cartとnewにデータを保存
+  }
+  // $result = array_search()
+  // var_dump($result);
+  #idがなければcartにnewを追加
+  // $_SESSION['cart'] = array_merge($_SESSION['new']);
+  // $_SESSION['cart'][] = array_merge(array( "item_id" => 12, "p_num" => 4, "cart" => "カートに入れる"));//カートに配列を追加
+  // unset($_SESSION['new']);
+  // unset($_SESSION['cart']);
+  // $_SESSION['new'][0]['item_id'] = 6; //IDの変更
+
+  // print_r(in_array($count,$new));
 
 ?>
 <!DOCTYPE html>
@@ -39,13 +49,12 @@ if (isset($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time())
     <p>ようこそ<?php echo $member['name']; ?>さん</p>
     <p>カート一覧</p>
     <p>
-      <?php print_r($new_session_id); ?>
-      <?php print_r($item_ids); ?>
-    <?php if(in_array($new_session_id, $item_ids)):?>
+
+    <?php //if(in_array($newPost['item_id'], $item_ids)):?>
       すでに登録されています
-    <?php else: ?>
+    <?php //else: ?>
       登録しました
-    <?php endif; ?>
+    <?php //endif; ?>
      </p>
   </body>
 </html>
