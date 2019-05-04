@@ -51,7 +51,7 @@ $items = $pdo->query($sql);
           <li><a href="./user/login.php">ログイン<br/><span>login</span></a></li>
           <?php endif; ?>
           <li><a href="./vender/login.php">出店者の方へ<br/><span>tenants</span></a></li>
-          <li><a href="#">問い合わせ<br/><span>outline</span></a></li>
+          <li><a href="inquiry/inquiry.php">問い合わせ<br/><span>outline</span></a></li>
           <?php if(isset($_SESSION['user']['id'])): ?>
           <li><a href="./user/logout.php">ログアウト</a></li>
           <?php endif; ?>

@@ -13,9 +13,9 @@ if (isset($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time())
   print_r($_SESSION);
   $new = $_SESSION['new'] ?? array(); //送られてきた値
   $item_id = $new[count($new)-1]['item_id'] ?? ""; //送られてきた値のitem_id
-  $cart = $_SESSION['cart'] ?? ""; //cartに保存してある値
+  $cart = $_SESSION['cart'] ?? array(); //cartに保存してある値
   #cartにitem_idがあるか検索(array_columnでitem_idをkeyに代入し、array_keysでitem_idを取り出し配列にする)
-  $item_ids = array_keys(array_column($cart,null,"item_id"));
+  $item_ids = array_keys(array_column($cart,null,"item_id")) ?? "";
   // print_r($item_ids); //cartのitem_id一覧表示OK
   #item_idがitem_idsにあるかを調べる
   // var_dump(in_array($item_id, $item_ids)); //OK
@@ -26,6 +26,8 @@ if (isset($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time())
   } else {
       #item_idがある時の処理
       $error = "same_id"; //セッションを更新せず、cartとnewにデータを保存
+      #カート内のデータを更新
+      // $_SESSION['cart'][]
   }
   // $result = array_search()
   // var_dump($result);
