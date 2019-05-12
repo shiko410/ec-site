@@ -7,7 +7,7 @@ if (isset($_SESSION['user']['id']) && $_SESSION['user']['time'] + 3600 > time())
   $members = $pdo->prepare('SELECT * FROM members WHERE id=?');
   $members->execute(array($_SESSION['user']['id']));
   $member = $members->fetch();
-  print_r($_SESSION);
+  // print_r($_SESSION);
 } else {
   header('Location: ../../index.php'); exit();
 }
